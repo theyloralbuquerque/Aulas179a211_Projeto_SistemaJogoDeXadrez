@@ -30,5 +30,4 @@ public class Posicao {
 	public String toString() { // toString() irá retornar apenas o valor da linha, o valor da coluna.
 		return linha + ", " + coluna;
 	}
-
 }
