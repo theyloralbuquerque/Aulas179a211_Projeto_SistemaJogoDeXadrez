@@ -1,7 +1,5 @@
 package xadrez;
 
-import jogo_de_tabuleiro.Peca;
-import jogo_de_tabuleiro.Posicao;
 import jogo_de_tabuleiro.Tabuleiro;
 import xadrez.pecas.King;
 import xadrez.pecas.Rook;
@@ -19,7 +17,7 @@ public class PartidaDeXadrez {
      * Método que retorna uma matriz
      *
      */
-    public PecaDeXadrez[][] getPecas() { // Método que retorna uma matriz do tipo PecaDeXadrez quando for chamado o getPecas().
+    public PecaDeXadrez[][] obterPecas() { // Método que retorna uma matriz do tipo PecaDeXadrez quando for chamado o getPecas().
        
     	// Instanciação de uma matriz mat do tipo PecaDeXadrez, passando como argumento as linhas do tabuleiro e as colunas do tabuleiro.
         PecaDeXadrez [][] mat = new PecaDeXadrez [tabuleiro.getLinhas()][tabuleiro.getColunas()];
@@ -39,19 +37,28 @@ public class PartidaDeXadrez {
         }
         return mat;
     }
+    
+    // Método que recebe as coordenas da PosicaoDoXadrez.
+    private void colocarNovaPeca(char coluna, int linha, PecaDeXadrez peca) {
+    	
+    	/*
+    	 * O objeto tabuleiro chama o método colocarPeca, passando como argumentos 
+    	 * um objeto peca e as coordenadas de xadrez que o usuário digitar convertidas
+    	 * em coordenadas de matriz.
+    	 */
+    	tabuleiro.colocarPeca(peca, new PosicaoDoXadrez(coluna, linha).paraPosicaoM());
+    }
 
     // Método resposável por iniciar a partida de xadrez colocando as peças no tabuleiro.
     private void configuracaoInicial() {
         /*
-         *  O objeto tabuleiro (classe tabuleiro) chama o método .colocarPeca()
-         *  que temos que passar dois argumentos (peca, posicao) para o método.
+         *  Chama o método .colocarNovaPeca() passando três argumentos 
+         *  (coluna, linha, peca) para o método.
          *  No atributo peca, instancia-se uma nova peça diretamente pelo nome da
          *  peça, passando como argumentos os atributos que a classe da peça pede.
-         *  No atributo posicao, instancia-se uma nova posição passando para o
-         *  construtor da classe Posicao o número de linhas e colunas.
          */
-        tabuleiro.colocarPeca(new Rook(tabuleiro, Cor.BRANCA), new Posicao(2, 1));
-        tabuleiro.colocarPeca(new King(tabuleiro, Cor.PRETA), new Posicao(0, 4));
-        tabuleiro.colocarPeca(new King(tabuleiro, Cor.BRANCA), new Posicao(7, 4));
+        colocarNovaPeca('b', 6, new Rook(tabuleiro, Cor.BRANCA));
+        colocarNovaPeca('e', 8, new King(tabuleiro, Cor.PRETA));
+        colocarNovaPeca('e', 1, new King(tabuleiro, Cor.BRANCA));
     }
  }

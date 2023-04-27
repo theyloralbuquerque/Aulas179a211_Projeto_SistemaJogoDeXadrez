@@ -7,6 +7,10 @@ public class Tabuleiro {
     private Peca[][] pecas; // Uma matriz do tipo Peca que chamaremos de pecas.
 
     public Tabuleiro(int linhas, int colunas) {
+        if (linhas < 1 || colunas < 1) {
+            throw new TabuleiroException("Erro na criação do tabuleiro: deve haver pelo menos 1 linha e 1 coluna.");
+        }
+
         this.linhas = linhas;
         this.colunas = colunas;
         pecas = new Peca [linhas][colunas]; // Uma nova matriz pecas do tipo Peca com os valores de [linhas] e [colunas].
@@ -16,20 +20,16 @@ public class Tabuleiro {
         return linhas;
     }
 
-    public void setLinhas(int linhas) {
-        this.linhas = linhas;
-    }
-
     public int getColunas() {
         return colunas;
     }
 
-    public void setColunas(int colunas) {
-        this.colunas = colunas;
-    }
-
      // Método peca do tipo Peca, que recebe como argumento linha e coluna e retorna a matriz pecas com os valores de linha e coluna.
     public Peca peca(int linha, int coluna) {
+        // Se o método posiçaoExiste não retornar true.
+        if (!posicaoExiste(linha, coluna)) {
+            throw new TabuleiroException("Posição não encontrada no tabuleiro.");
+        }
         return pecas[linha][coluna];
     }
 
@@ -38,16 +38,49 @@ public class Tabuleiro {
      * e retorna a matriz pecas com os valores de linha e coluna.
      */
     public Peca peca(Posicao posicao) {
+        
+    	// Se o método posiçaoExiste não retornar true.
+        if (!posicaoExiste(posicao)) {
+            throw new TabuleiroException("Posição não encontrada no tabuleiro.");
+        }
         return pecas[posicao.getLinha()][posicao.getColuna()];
     }
 
     // Método que aloca uma peça no tabuleiro
     public void colocarPeca(Peca peca, Posicao posicao) {
-    	
+        
+    	// Se o método retornar true (o valor da posicao diferente de null), quer dizer que tem uma peça nessa posição.
+        if (haUmaPeca(posicao)) {
+            throw new TabuleiroException("Já existe uma peça na posição" + posicao);
+        }
+        
         // A matriz na posição[posicao.getLinha()][posicao.getColuna()] vai receber o valor de peca.
         pecas[posicao.getLinha()][posicao.getColuna()] = peca;
-        
-        // O objeto peca chama atributo posicao da classe Peca recebe o valor de posicao, portanto o valor de peca não é mais null.
+     
+        // O atributo posicao da classe Peca recebe o valor de posicao, portanto o valor de peca não é mais null.
         peca.posicao = posicao;
+    }
+
+    // Método auxiliar, que retorna se a posição existe ou não, retornando um True ou False.
+    private boolean posicaoExiste(int linha, int coluna) {
+        
+    	// Se a condição abaixo for verdadeira retorna true senão retorna false.
+        return linha >= 0 && linha < linhas && coluna >= 0 && coluna < colunas;
+    }
+
+    // Método irá retonar a chamada do método auxiliar acima.
+    public boolean posicaoExiste(Posicao posicao) {
+        return posicaoExiste(posicao.getLinha(), posicao.getColuna());
+    }
+
+    // Método irá retornar o resultado da chamada do método peca, se a posição da peça é ou não diferente de null.
+    public boolean haUmaPeca(Posicao posicao) {
+       
+    	// Se o método posiçaoExiste não retornar true.
+        if (!posicaoExiste(posicao)) {
+            throw new TabuleiroException("Posição não encontrada no tabuleiro.");
+        }
+ 
+        return peca(posicao) != null; // Se o retorno do método for diferente de null retorna um true, senão retorna um false.
     }
 }
