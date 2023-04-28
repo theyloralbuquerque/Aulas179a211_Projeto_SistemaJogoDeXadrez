@@ -60,6 +60,25 @@ public class Tabuleiro {
         // O atributo posicao da classe Peca recebe o valor de posicao, portanto o valor de peca não é mais null.
         peca.posicao = posicao;
     }
+    
+    
+    public Peca removerPeca(Posicao posicao) {
+    	
+    	// Programação defensiva. Testa se posição passada como argumento existe.
+    	if (!posicaoExiste(posicao)) {
+    		throw new TabuleiroException("Posição não encontrada no tabuleiro.");
+    	}
+    	
+    	// Se a peça do tabuleiro nessa posição for null, retorne null.
+    	if (peca(posicao) == null) {
+    		return null;
+    	}
+    	Peca aux = peca(posicao);
+    	aux.posicao = null;
+    	pecas[posicao.getLinha()][posicao.getColuna()] = null;
+    	return aux;
+    }
+    
 
     // Método auxiliar, que retorna se a posição existe ou não, retornando um True ou False.
     private boolean posicaoExiste(int linha, int coluna) {

@@ -1,9 +1,14 @@
 package application;
 
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 import xadrez.Cor;
 import xadrez.PecaDeXadrez;
+import xadrez.PosicaoDoXadrez;
+
 public class UI {
-	
+
 	// https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println
 
 	public static final String ANSI_RESET = "\u001B[0m";
@@ -25,36 +30,48 @@ public class UI {
 	public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
 	public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
-    // Método que irá imprimir o tabuleiro.
-	// Recebe uma matriz do tipo PecaDeXadrez que chamaremos de pecas.
-    public static void printTabuleiro(PecaDeXadrez[][] pecas) {
-    	
-        // Enquanto i for menor que o número de linhas da matriz pecas.
-        for (int i=0; i<pecas.length; i++) {
-        	
-            System.out.print((8 - i) + " "); // 8 menos o valor de i seguido de um espaço.
-            
-            // Enquanto j for menor que o número de linhas da matriz pecas.
-            for (int j=0; j<pecas.length; j++) {
-                printPeca(pecas[i][j]); // Chamada do método printPeca passando como parâmentros o valor da matriz pecas.
-            }
-            System.out.println();
-        }
-        System.out.println("  a b c d e f g h"); // Impressão da linha de orientação das colunas do xadrez.
-    }
+	public static PosicaoDoXadrez lerPosicaoXadrez(Scanner sc) {
+		try {
+			String s = sc.nextLine();
+			char coluna = s.charAt(0);
+			int linha = Integer.parseInt(s.substring(1)); // linha recebe a String s cortada a partir da posição de caractere 1, convertido para Integer.
+			return new PosicaoDoXadrez(coluna, linha);
+		}
+		catch (RuntimeException e) {
+			throw new InputMismatchException("Erro ao ler posição do xadrez. Valores válidos vão de a1 a h8.");
+		}
+	}
 
-    private static void printPeca(PecaDeXadrez peca) {
-    	if (peca == null) {
-            System.out.print("-");
-        }
-        else {
-            if (peca.getCor() == Cor.BRANCA) {
-                System.out.print(ANSI_WHITE + peca + ANSI_RESET);
-            }
-            else {
-                System.out.print(ANSI_YELLOW + peca + ANSI_RESET);
-            }
-        }
-        System.out.print(" "); // Espaço para evitar que as pecas ou os traços (-) fiquem grudados na exibição do tabuleiro.
-    }
+	// Método que irá imprimir o tabuleiro.
+	// Recebe uma matriz do tipo PecaDeXadrez que chamaremos de pecas.
+	public static void printTabuleiro(PecaDeXadrez[][] pecas) {
+
+		// Enquanto i for menor que o número de linhas da matriz pecas.
+		for (int i = 0; i < pecas.length; i++) {
+
+			System.out.print((8 - i) + " "); // 8 menos o valor de i seguido de um espaço.
+
+			// Enquanto j for menor que o número de linhas da matriz pecas.
+			for (int j = 0; j < pecas.length; j++) {
+				printPeca(pecas[i][j]); // Chamada do método printPeca passando como parâmentros o valor da matriz
+										// pecas.
+			}
+			System.out.println();
+		}
+		System.out.println("  a b c d e f g h"); // Impressão da linha de orientação das colunas do xadrez.
+	}
+
+	private static void printPeca(PecaDeXadrez peca) {
+		if (peca == null) {
+			System.out.print("-");
+		} else {
+			if (peca.getCor() == Cor.BRANCA) {
+				System.out.print(ANSI_WHITE + peca + ANSI_RESET);
+			} else {
+				System.out.print(ANSI_YELLOW + peca + ANSI_RESET);
+			}
+		}
+		System.out.print(" "); // Espaço para evitar que as pecas ou os traços (-) fiquem grudados na exibição
+								// do tabuleiro.
+	}
 }

@@ -1,6 +1,9 @@
 package xadrez;
 
+import jogo_de_tabuleiro.Peca;
+import jogo_de_tabuleiro.Posicao;
 import jogo_de_tabuleiro.Tabuleiro;
+import jogo_de_tabuleiro.TabuleiroException;
 import xadrez.pecas.King;
 import xadrez.pecas.Rook;
 
@@ -38,6 +41,39 @@ public class PartidaDeXadrez {
         return mat;
     }
     
+    
+    public PecaDeXadrez executarJogadaDeXadrez(PosicaoDoXadrez posicaoDeOrigem, PosicaoDoXadrez posicaoDeDestino) {
+    	
+    	/* A variável origem do tipo Posicao recebe o retorno do método paraPosicaoM(), 
+    	 * que irá converter o valor de posicaoDeOrigem para posição da matriz.
+    	 */
+    	Posicao origem = posicaoDeOrigem.paraPosicaoM(); 
+    	
+    	/* A variável destino do tipo Posicao recebe o retorno do método paraPosicaoM(), 
+    	 * que irá converter o valor de posicaoDeOrigem para posição da matriz.
+    	 */
+    	
+    	Posicao destino = posicaoDeDestino.paraPosicaoM();
+    	validarPosicaoDeOrigem(origem);
+    	Peca pecaCapturada = fazerMover(origem, destino);
+    	return (PecaDeXadrez)pecaCapturada;
+    }
+    
+    private Peca fazerMover(Posicao origem, Posicao destino) {
+    	Peca p = tabuleiro.removerPeca(origem); // Retira a peça da posição de origem.
+    	Peca pecaCapturada = tabuleiro.removerPeca(destino); // Retira a peça que está na posição de destino e armazena na variável pecaCapturada.
+    	tabuleiro.colocarPeca(p, destino); // Chamada do método colocarPeca, colocando a peça p na posição de destino.
+    	return pecaCapturada;
+    }
+    
+    
+    public void validarPosicaoDeOrigem(Posicao posicao) {
+    	if (!tabuleiro.haUmaPeca(posicao)) {
+    		throw new XadrezException("Não há peça na posição de origem.");
+    	}
+    }
+    	
+    	
     // Método que recebe as coordenas da PosicaoDoXadrez.
     private void colocarNovaPeca(char coluna, int linha, PecaDeXadrez peca) {
     	
@@ -49,6 +85,7 @@ public class PartidaDeXadrez {
     	tabuleiro.colocarPeca(peca, new PosicaoDoXadrez(coluna, linha).paraPosicaoM());
     }
 
+    
     // Método resposável por iniciar a partida de xadrez colocando as peças no tabuleiro.
     private void configuracaoInicial() {
         /*
