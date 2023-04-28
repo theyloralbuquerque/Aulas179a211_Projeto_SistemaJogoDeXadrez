@@ -57,8 +57,18 @@ public class PartidaDeXadrez {
          *  No atributo peca, instancia-se uma nova peça diretamente pelo nome da
          *  peça, passando como argumentos os atributos que a classe da peça pede.
          */
-        colocarNovaPeca('b', 6, new Rook(tabuleiro, Cor.BRANCA));
-        colocarNovaPeca('e', 8, new King(tabuleiro, Cor.PRETA));
-        colocarNovaPeca('e', 1, new King(tabuleiro, Cor.BRANCA));
+    	colocarNovaPeca('c', 1, new Rook(tabuleiro, Cor.BRANCA));
+    	colocarNovaPeca('c', 2, new Rook(tabuleiro, Cor.BRANCA));
+    	colocarNovaPeca('d', 2, new Rook(tabuleiro, Cor.BRANCA));
+    	colocarNovaPeca('e', 2, new Rook(tabuleiro, Cor.BRANCA));
+    	colocarNovaPeca('e', 1, new Rook(tabuleiro, Cor.BRANCA));
+    	colocarNovaPeca('d', 1, new King(tabuleiro, Cor.BRANCA));
+
+    	colocarNovaPeca('c', 7, new Rook(tabuleiro, Cor.PRETA));
+    	colocarNovaPeca('c', 8, new Rook(tabuleiro, Cor.PRETA));
+    	colocarNovaPeca('d', 7, new Rook(tabuleiro, Cor.PRETA));
+    	colocarNovaPeca('e', 7, new Rook(tabuleiro, Cor.PRETA));
+    	colocarNovaPeca('e', 8, new Rook(tabuleiro, Cor.PRETA));
+    	colocarNovaPeca('d', 8, new King(tabuleiro, Cor.PRETA));
     }
  }
