@@ -60,7 +60,7 @@ public class UI {
 
 			// Enquanto j for menor que o número de linhas da matriz pecas.
 			for (int j = 0; j < pecas.length; j++) {
-				printPeca(pecas[i][j]); // Chamada do método printPeca passando como parâmentros o valor da matriz
+				printPeca(pecas[i][j], false); // Chamada do método printPeca passando como parâmentros o valor da matriz
 										// pecas.
 			}
 			System.out.println();
@@ -68,10 +68,34 @@ public class UI {
 		System.out.println("  a b c d e f g h"); // Impressão da linha de orientação das colunas do xadrez.
 	}
 
+	
+	// Método que irá imprimir o tabuleiro considerando os movimentos possíveis.
+	// Recebe uma matriz do tipo PecaDeXadrez que chamaremos de pecas e a matriz boolean movimentosPossiveis.
+	public static void printTabuleiro(PecaDeXadrez[][] pecas, boolean[][] movimentosPossiveis) {
+
+		// Enquanto i for menor que o número de linhas da matriz pecas.
+		for (int i = 0; i < pecas.length; i++) {
+
+			System.out.print((8 - i) + " "); // 8 menos o valor de i seguido de um espaço.
+
+			// Enquanto j for menor que o número de linhas da matriz pecas.
+			for (int j = 0; j < pecas.length; j++) {
+				printPeca(pecas[i][j], movimentosPossiveis[i][j]); // Chamada do método printPeca passando como parâmentros o valor da matriz pecas.
+										
+			}
+			System.out.println();
+		}
+		System.out.println("  a b c d e f g h"); // Impressão da linha de orientação das colunas do xadrez.
+	}
+
+	
 	// Método que exibe a peça no tabuleiro de xadrez.
-	private static void printPeca(PecaDeXadrez peca) {
+	private static void printPeca(PecaDeXadrez peca, boolean fundo) {
+		if (fundo) {
+			System.out.print(ANSI_BLUE_BACKGROUND);
+		}
 		if (peca == null) {
-			System.out.print("-");
+			System.out.print("-" + ANSI_RESET);
 		} else {
 			if (peca.getCor() == Cor.BRANCA) {
 				System.out.print(ANSI_WHITE + peca + ANSI_RESET);
@@ -79,7 +103,6 @@ public class UI {
 				System.out.print(ANSI_YELLOW + peca + ANSI_RESET);
 			}
 		}
-		System.out.print(" "); // Espaço para evitar que as pecas ou os traços (-) fiquem grudados na exibição
-								// do tabuleiro.
+		System.out.print(" "); // Espaço para evitar que as pecas ou os traços (-) fiquem grudados na exibição do tabuleiro.
 	}
 }

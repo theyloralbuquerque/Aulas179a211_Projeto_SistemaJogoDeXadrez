@@ -29,11 +29,14 @@ public class Program {
                 System.out.println();
                 System.out.print("Origem: ");
                 PosicaoDoXadrez origem = UI.lerPosicaoXadrez(sc);
-
+                
+                boolean[][] movimentosPossiveis = partidaDeXadrez.movimentosPossiveis(origem);
+                UI.limparTela();
+                UI.printTabuleiro(partidaDeXadrez.obterPecas(), movimentosPossiveis);
                 System.out.println();
+                
                 System.out.print("Destino: ");
                 PosicaoDoXadrez destino = UI.lerPosicaoXadrez(sc);
-
                 PecaDeXadrez pecaCapturada = partidaDeXadrez.executarJogadaDeXadrez(origem, destino);
             }
             catch (XadrezException e) {

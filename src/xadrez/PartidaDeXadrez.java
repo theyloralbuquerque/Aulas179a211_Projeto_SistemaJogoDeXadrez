@@ -40,6 +40,13 @@ public class PartidaDeXadrez {
         return mat;
     }
 
+    
+    public boolean[][] movimentosPossiveis(PosicaoDoXadrez posicaoDeOrigem) {
+    	Posicao posicao = posicaoDeOrigem.paraPosicaoM();
+    	validarPosicaoDeOrigem(posicao);
+    	return tabuleiro.peca(posicao).movimentosPossiveis();
+    }
+    
 
     // Método que executa uma jogada de xadrez.
     public PecaDeXadrez executarJogadaDeXadrez(PosicaoDoXadrez posicaoDeOrigem, PosicaoDoXadrez posicaoDeDestino) {
