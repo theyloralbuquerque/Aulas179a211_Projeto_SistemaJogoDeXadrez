@@ -1,6 +1,7 @@
 package xadrez;
 
 import jogo_de_tabuleiro.Peca;
+import jogo_de_tabuleiro.Posicao;
 import jogo_de_tabuleiro.Tabuleiro;
 
 public abstract class PecaDeXadrez extends Peca{ // Herda da classe Peca.
@@ -14,5 +15,10 @@ public abstract class PecaDeXadrez extends Peca{ // Herda da classe Peca.
 
     public Cor getCor() {
         return cor;
+    }
+
+    protected boolean existeUmaPecaAdversaria(Posicao posicao) {
+    	PecaDeXadrez p = (PecaDeXadrez)getTabuleiro().peca(posicao);
+    	return p != null && p.getCor() != cor; // Se p é diferente de null e a cor de p é diferente da cor da minha peça.
     }
 }

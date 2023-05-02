@@ -26,6 +26,11 @@ public class Posicao {
 		this.coluna = coluna;
 	}
 	
+	public void definirValores(int linha, int coluna) {
+		this.linha = linha;
+		this.coluna = coluna;
+	}
+	
 	@Override
 	public String toString() { // toString() irá retornar apenas o valor da linha, o valor da coluna.
 		return linha + ", " + coluna;

@@ -55,6 +55,7 @@ public class PartidaDeXadrez {
     	Posicao destino = posicaoDeDestino.paraPosicaoM();
 
     	validarPosicaoDeOrigem(origem);
+    	validarPosicaoDeDestino(origem, destino);
     	Peca pecaCapturada = fazerMover(origem, destino);
     	return (PecaDeXadrez)pecaCapturada;
     }
@@ -76,6 +77,15 @@ public class PartidaDeXadrez {
     	}
     	if (!tabuleiro.peca(posicao).existeAlgumMovimentoPossivel()) {
     	    throw new XadrezException("Nao existem movimentos possiveis para a peca.");
+    	}
+    }
+    
+    // Método que valida se a posição de destino de uma peça é um movimento possível, com base na posição de origem.
+    private void validarPosicaoDeDestino(Posicao origem, Posicao destino) {
+    
+    	// Se para a peça de origem a posição de destino não é um movimento possível. 
+    	if (!tabuleiro.peca(origem).movimentoPossivel(destino)) {
+    		throw new XadrezException("A peca escolhida nao pode se mover para a posicao de destino.");
     	}
     }
 
