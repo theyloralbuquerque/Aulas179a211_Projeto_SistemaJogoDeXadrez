@@ -30,6 +30,13 @@ public class UI {
 	public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
 	public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
+	// Método para limpar a tela a cada jogada.
+	// https://stackoverflow.com/questions/2979383/java-clear-the-console
+	public static void limparTela() {
+	    System.out.print("\033[H\033[2J");
+	    System.out.flush();
+	}
+
 	public static PosicaoDoXadrez lerPosicaoXadrez(Scanner sc) {
 		try {
 			String s = sc.nextLine();
@@ -61,6 +68,7 @@ public class UI {
 		System.out.println("  a b c d e f g h"); // Impressão da linha de orientação das colunas do xadrez.
 	}
 
+	// Método que exibe a peça no tabuleiro de xadrez.
 	private static void printPeca(PecaDeXadrez peca) {
 		if (peca == null) {
 			System.out.print("-");
