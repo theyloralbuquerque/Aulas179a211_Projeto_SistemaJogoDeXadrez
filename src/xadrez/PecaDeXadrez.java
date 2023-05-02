@@ -3,7 +3,7 @@ package xadrez;
 import jogo_de_tabuleiro.Peca;
 import jogo_de_tabuleiro.Tabuleiro;
 
-public class PecaDeXadrez extends Peca{ // Herda da classe Peca. 
+public abstract class PecaDeXadrez extends Peca{ // Herda da classe Peca.
 
     private Cor cor;
 
