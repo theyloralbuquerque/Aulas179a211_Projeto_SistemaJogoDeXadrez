@@ -18,23 +18,17 @@ public class Program {
         while (true) {
             try {
                 UI.limparTela();
-                /*
-                 * O método printTabuleiro da classe UI é chamado
-                 * passando como argumento o objeto partidaDexadrez
-                 * do tipo PartidaDeXadrez que chama o método obterPecas()
-                 * da classe PartidaDeXadreze passa o resultado do método
-                 * obterPecas() como argumento para o método printTabuleiro().
-                 */
-                UI.printTabuleiro(partidaDeXadrez.obterPecas());
+
+                UI.printPartida(partidaDeXadrez);
                 System.out.println();
                 System.out.print("Origem: ");
                 PosicaoDoXadrez origem = UI.lerPosicaoXadrez(sc);
-                
+
                 boolean[][] movimentosPossiveis = partidaDeXadrez.movimentosPossiveis(origem);
                 UI.limparTela();
                 UI.printTabuleiro(partidaDeXadrez.obterPecas(), movimentosPossiveis);
                 System.out.println();
-                
+
                 System.out.print("Destino: ");
                 PosicaoDoXadrez destino = UI.lerPosicaoXadrez(sc);
                 PecaDeXadrez pecaCapturada = partidaDeXadrez.executarJogadaDeXadrez(origem, destino);
