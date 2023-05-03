@@ -1,7 +1,10 @@
 package application;
 
+import java.util.Arrays;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import xadrez.Cor;
 import xadrez.PartidaDeXadrez;
@@ -52,9 +55,10 @@ public class UI {
 
 
     // Método que irá imprimir informações da partida, como turno e jogador da vez.
-    public static void printPartida(PartidaDeXadrez partidaDeXadrez) {
+    public static void printPartida(PartidaDeXadrez partidaDeXadrez, List<PecaDeXadrez> capturadas) {
         printTabuleiro(partidaDeXadrez.obterPecas());
         System.out.println();
+        printPecasCapturadas(capturadas);
         System.out.println("Turno: " + partidaDeXadrez.getTurno());
         System.out.println("Espeando o jogador: " + partidaDeXadrez.getjogadorAtual());
     }
@@ -115,5 +119,35 @@ public class UI {
             }
         }
         System.out.print(" "); // Espaço para evitar que as pecas ou os traços (-) fiquem grudados na exibição do tabuleiro.
+    }
+
+
+    // Método que irá imprimir a lista de peças capturadas.
+    private static void printPecasCapturadas(List<PecaDeXadrez> capturadas) {
+
+        // Criação da lista brancas e filtragem por brancas das peças capturadas, através de uma expressão lambda.
+        List<PecaDeXadrez> brancas = capturadas.stream().filter(x -> x.getCor() == Cor.BRANCA).collect(Collectors.toList());
+
+        // Criação da lista brancas e filtragem por pretas das peças capturadas, através de uma expressão lambda.
+        List<PecaDeXadrez> pretas = capturadas.stream().filter(x -> x.getCor() == Cor.PRETA).collect(Collectors.toList());
+
+        System.out.println("Pecas capturadas: ");
+
+        System.out.print("Brancas: ");
+        // A linha abaixo irá exibir o comando que estiver abaixo dela na cor branca.
+        System.out.print(ANSI_WHITE);
+        // A linha abaixo irá exibir em array a lista brancas.
+        System.out.println(Arrays.toString(brancas.toArray()));
+        // A linha abaixo irá resetar a definição de cores para os próximos comandos.
+        System.out.print(ANSI_RESET);
+
+        System.out.print("Pretas: ");
+        // A linha abaixo irá exibir o comando que estiver abaixo dela na cor amarela.
+        System.out.print(ANSI_YELLOW);
+        // A linha abaixo irá exibir em array a lista pretas.
+        System.out.println(Arrays.toString(pretas.toArray()));
+        // A linha abaixo irá resetar a definição de cores para os próximos comandos.
+        System.out.print(ANSI_RESET);
+
     }
 }

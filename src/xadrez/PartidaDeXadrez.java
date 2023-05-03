@@ -1,5 +1,8 @@
 package xadrez;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jogo_de_tabuleiro.Peca;
 import jogo_de_tabuleiro.Posicao;
 import jogo_de_tabuleiro.Tabuleiro;
@@ -11,6 +14,9 @@ public class PartidaDeXadrez {
     private int turno;
     private Cor jogadorAtual;
     private Tabuleiro tabuleiro; // Atributo tabuleiro do tipo Tabuleiro.
+
+    private List<Peca> pecasNoTabuleiro = new ArrayList<>();
+    private List<Peca> pecasCapturadas = new ArrayList<>();
 
     public PartidaDeXadrez() {
         tabuleiro = new Tabuleiro(8, 8); // Instanciação do objeto tabuleiro passando como argumento (8, 8).
@@ -88,6 +94,12 @@ public class PartidaDeXadrez {
         Peca p = tabuleiro.removerPeca(origem); // Retira a peça da posição de origem.
         Peca pecaCapturada = tabuleiro.removerPeca(destino); // Retira a peça que está na posição de destino e armazena na variável pecaCapturada.
         tabuleiro.colocarPeca(p, destino); // Chamada do método colocarPeca, colocando a peça p na posição de destino.
+
+        // Se a pecaCapturada for diferente de null, então.
+        if (pecaCapturada != null) {
+            pecasNoTabuleiro.remove(pecaCapturada);
+            pecasCapturadas.add(pecaCapturada);
+        }
         return pecaCapturada;
     }
 
@@ -134,6 +146,8 @@ public class PartidaDeXadrez {
          * em coordenadas de matriz.
          */
         tabuleiro.colocarPeca(peca, new PosicaoDoXadrez(coluna, linha).paraPosicaoM());
+
+        pecasNoTabuleiro.add(peca);
     }
 
 
