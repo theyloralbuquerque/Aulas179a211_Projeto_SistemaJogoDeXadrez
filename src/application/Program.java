@@ -18,7 +18,8 @@ public class Program {
         PartidaDeXadrez partidaDeXadrez = new PartidaDeXadrez(); // Instanciação do objeto partidaDeXadrez do tipo PartidaDeXadrez.
         List<PecaDeXadrez> capturadas = new ArrayList<>();
 
-        while (true) {
+        // Enquanto getXequeMate() for falso, faça.
+        while (!partidaDeXadrez.getXequeMate()) {
             try {
                 UI.limparTela();
 
@@ -51,5 +52,7 @@ public class Program {
                 sc.nextLine();
             }
         }
+        UI.limparTela();
+        UI.printPartida(partidaDeXadrez, capturadas);
     }
 }

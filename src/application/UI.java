@@ -61,11 +61,15 @@ public class UI {
         printPecasCapturadas(capturadas);
         System.out.println();
         System.out.println("Turno: " + partidaDeXadrez.getTurno());
-        System.out.println("Espeando o jogador: " + partidaDeXadrez.getjogadorAtual());
-        
-        // Se o getXeque() for verdadeiro, então.
-        if (partidaDeXadrez.getXeque()) {
-        	System.out.println("XEQUE!");
+        if (!partidaDeXadrez.getXequeMate()) {
+            System.out.println("Espeando o jogador: " + partidaDeXadrez.getjogadorAtual());
+            if (partidaDeXadrez.getXeque()) {
+                System.out.println("XEQUE!");
+            }
+        }
+        else {
+            System.out.println("XEQUE MATE!");
+            System.out.println("Vencedor: " + partidaDeXadrez.getjogadorAtual());
         }
     }
 
