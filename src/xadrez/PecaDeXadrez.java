@@ -16,6 +16,11 @@ public abstract class PecaDeXadrez extends Peca{ // Herda da classe Peca.
     public Cor getCor() {
         return cor;
     }
+    
+    // Método que retorna a posição do xadrez.
+    public PosicaoDoXadrez obterPosicaoDoXadrez() {
+    	return PosicaoDoXadrez.paraPosicaoX(posicao);
+    }
 
     protected boolean existeUmaPecaAdversaria(Posicao posicao) {
     	PecaDeXadrez p = (PecaDeXadrez)getTabuleiro().peca(posicao);

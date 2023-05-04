@@ -2,6 +2,7 @@ package xadrez;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import jogo_de_tabuleiro.Peca;
 import jogo_de_tabuleiro.Posicao;
@@ -14,6 +15,7 @@ public class PartidaDeXadrez {
     private int turno;
     private Cor jogadorAtual;
     private Tabuleiro tabuleiro; // Atributo tabuleiro do tipo Tabuleiro.
+    private boolean xeque;
 
     private List<Peca> pecasNoTabuleiro = new ArrayList<>();
     private List<Peca> pecasCapturadas = new ArrayList<>();
@@ -34,6 +36,9 @@ public class PartidaDeXadrez {
         return jogadorAtual;
     }
 
+    public boolean getXeque() {
+    	return xeque;
+    }
 
     /*
      * Método que retorna uma matriz
@@ -84,6 +89,15 @@ public class PartidaDeXadrez {
         validarPosicaoDeOrigem(origem);
         validarPosicaoDeDestino(origem, destino);
         Peca pecaCapturada = fazerMover(origem, destino);
+        
+        // Essa condição testa se o jogador se colocou em xeque.
+        if (testeXeque(jogadorAtual)) {
+        	desfazerMovimento(origem, destino, pecaCapturada);
+        	throw new XadrezException("Voce nao pode se colocar em xaque!");
+        }
+        
+        xeque = (testeXeque(oponente(jogadorAtual))) ? true : false;
+        
         proximoTurno();
         return (PecaDeXadrez)pecaCapturada;
     }
@@ -103,7 +117,21 @@ public class PartidaDeXadrez {
         return pecaCapturada;
     }
 
+    
+    // Método que desfaz o movimento feito, quando necessário.
+    public void desfazerMovimento(Posicao posicaoDeOrigem, Posicao posicaoDeDestino, Peca pecaCapturada) {
+    	Peca p = tabuleiro.removerPeca(posicaoDeDestino);
+    	tabuleiro.colocarPeca(p, posicaoDeOrigem);
+    	
+    	// Essa condição, se verdadeira, irá colocar a pecaCapturada de volta no lugar onde ela foi tirada.
+    	if (pecaCapturada != null) {
+    		tabuleiro.colocarPeca(pecaCapturada, posicaoDeDestino);
+    		pecasCapturadas.remove(pecaCapturada);
+    		pecasNoTabuleiro.add(pecaCapturada);
+    	}
+    }
 
+    
     // Método que valida se na posição de origem de uma peça realemente há uma peça lá.
     private void validarPosicaoDeOrigem(Posicao posicao) {
         if (!tabuleiro.haUmaPeca(posicao)) {
@@ -137,6 +165,40 @@ public class PartidaDeXadrez {
         jogadorAtual = (jogadorAtual == Cor.BRANCA) ? Cor.PRETA : Cor.BRANCA;
     }
 
+    
+    private Cor oponente(Cor cor) {
+    	
+    	//Se a cor recebida como argumento for BRANCA, eu retorno Cor.PRETA, senão, retorno Cor.BRANCA.
+    	return (cor == Cor.BRANCA) ? Cor.PRETA : Cor.BRANCA;
+    }
+    
+    
+    private PecaDeXadrez king(Cor cor) {
+    	// Criação de uma lista que irá filtrar a lista pecasNoTabuleiro pela cor do king, utilizando uma expressão lambda.
+    	List<Peca> list = pecasNoTabuleiro.stream().filter(x -> ((PecaDeXadrez)x).getCor() == cor).collect(Collectors.toList());
+    	for (Peca p : list) {
+    		if (p instanceof King) {
+    			return (PecaDeXadrez)p;
+    		}
+    	}
+    	throw new IllegalStateException("Nao existe rei da cor " + cor + " no tabuleiro.");
+    }
+    
+    
+    // Méotodo que verifica que se o king pode estar em xeque.
+    private boolean testeXeque(Cor cor) {
+    	Posicao kingPosicao = king(cor).obterPosicaoDoXadrez().paraPosicaoM();
+    	List<Peca> pecasDoOponente = pecasNoTabuleiro.stream().filter(x -> ((PecaDeXadrez)x).getCor() == oponente(cor)).collect(Collectors.toList());
+    	for (Peca p : pecasDoOponente) {
+    		boolean[][] mat = p.movimentosPossiveis(); 
+    		if (mat[kingPosicao.getLinha()][kingPosicao.getColuna()]) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    
     // Método que recebe as coordenas da PosicaoDoXadrez.
     private void colocarNovaPeca(char coluna, int linha, PecaDeXadrez peca) {
 
