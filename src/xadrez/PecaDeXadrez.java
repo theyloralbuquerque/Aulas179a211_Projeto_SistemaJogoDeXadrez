@@ -7,6 +7,7 @@ import jogo_de_tabuleiro.Tabuleiro;
 public abstract class PecaDeXadrez extends Peca{ // Herda da classe Peca.
 
     private Cor cor;
+    private int contadorDeMovimentos;
 
     public PecaDeXadrez(Tabuleiro tabuleiro, Cor cor) { // Construtor recebendo como argumento tabuleiro e cor.
         super(tabuleiro);
@@ -16,7 +17,19 @@ public abstract class PecaDeXadrez extends Peca{ // Herda da classe Peca.
     public Cor getCor() {
         return cor;
     }
-    
+
+    public int getContadorDeMovimentos() {
+        return contadorDeMovimentos;
+    }
+
+    public void incrementarNoContadorDeMovimentos() {
+        contadorDeMovimentos++;
+    }
+
+    public void decrementarNoContadorDeMovimentos() {
+        contadorDeMovimentos--;
+    }
+
     // Método que retorna a posição do xadrez.
     public PosicaoDoXadrez obterPosicaoDoXadrez() {
     	return PosicaoDoXadrez.paraPosicaoX(posicao);
