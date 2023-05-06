@@ -9,7 +9,9 @@ import jogo_de_tabuleiro.Posicao;
 import jogo_de_tabuleiro.Tabuleiro;
 import xadrez.pecas.Bishop;
 import xadrez.pecas.King;
+import xadrez.pecas.Knight;
 import xadrez.pecas.Pawn;
+import xadrez.pecas.Queen;
 import xadrez.pecas.Rook;
 
 public class PartidaDeXadrez {
@@ -263,9 +265,12 @@ public class PartidaDeXadrez {
          *  peça, passando como argumentos os atributos que a classe da peça pede.
          */
         colocarNovaPeca('a', 1, new Rook(tabuleiro, Cor.BRANCA));
+        colocarNovaPeca('b', 1, new Knight(tabuleiro, Cor.BRANCA));
         colocarNovaPeca('c', 1, new Bishop(tabuleiro, Cor.BRANCA));
+        colocarNovaPeca('d', 1, new Queen(tabuleiro, Cor.BRANCA));
         colocarNovaPeca('e', 1, new King(tabuleiro, Cor.BRANCA));
         colocarNovaPeca('f', 1, new Bishop(tabuleiro, Cor.BRANCA));
+        colocarNovaPeca('g', 1, new Knight(tabuleiro, Cor.BRANCA));
         colocarNovaPeca('h', 1, new Rook(tabuleiro, Cor.BRANCA));
         colocarNovaPeca('a', 2, new Pawn(tabuleiro, Cor.BRANCA));
         colocarNovaPeca('b', 2, new Pawn(tabuleiro, Cor.BRANCA));
@@ -277,9 +282,12 @@ public class PartidaDeXadrez {
         colocarNovaPeca('h', 2, new Pawn(tabuleiro, Cor.BRANCA));
 
         colocarNovaPeca('a', 8, new Rook(tabuleiro, Cor.PRETA));
+        colocarNovaPeca('b', 8, new Knight(tabuleiro, Cor.PRETA));
         colocarNovaPeca('c', 8, new Bishop(tabuleiro, Cor.PRETA));
+        colocarNovaPeca('d', 8, new Queen(tabuleiro, Cor.PRETA));
         colocarNovaPeca('e', 8, new King(tabuleiro, Cor.PRETA));
         colocarNovaPeca('f', 8, new Bishop(tabuleiro, Cor.PRETA));
+        colocarNovaPeca('g', 8, new Knight(tabuleiro, Cor.PRETA));
         colocarNovaPeca('h', 8, new Rook(tabuleiro, Cor.PRETA));
         colocarNovaPeca('a', 7, new Pawn(tabuleiro, Cor.PRETA));
         colocarNovaPeca('b', 7, new Pawn(tabuleiro, Cor.PRETA));
