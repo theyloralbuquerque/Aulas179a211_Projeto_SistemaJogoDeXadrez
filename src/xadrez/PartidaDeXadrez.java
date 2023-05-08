@@ -123,27 +123,64 @@ public class PartidaDeXadrez {
         Peca pecaCapturada = tabuleiro.removerPeca(destino); // Retira a peça que está na posição de destino e armazena na variável pecaCapturada.
         tabuleiro.colocarPeca(p, destino); // Chamada do método colocarPeca, colocando a peça p na posição de destino.
 
-        // Se a pecaCapturada for diferente de null, então.
         if (pecaCapturada != null) {
             pecasNoTabuleiro.remove(pecaCapturada);
             pecasCapturadas.add(pecaCapturada);
         }
+
+        // Movimento especial roque pequeno, lado do rei.
+        if (p instanceof King && destino.getColuna() == origem.getColuna() + 2) {
+            Posicao origemT = new Posicao(origem.getLinha(), origem.getColuna() + 3);
+            Posicao destinoT = new Posicao(origem.getLinha(), origem.getColuna() + 1);
+            PecaDeXadrez rook = (PecaDeXadrez)tabuleiro.removerPeca(origemT);
+            tabuleiro.colocarPeca(rook, destinoT);
+            rook.incrementarNoContadorDeMovimentos();
+        }
+
+        // Movimento especial roque grande, lado da rainha.
+        if (p instanceof King && destino.getColuna() == origem.getColuna() - 2) {
+            Posicao origemT = new Posicao(origem.getLinha(), origem.getColuna() - 4);
+            Posicao destinoT = new Posicao(origem.getLinha(), origem.getColuna() - 1);
+            PecaDeXadrez rook = (PecaDeXadrez)tabuleiro.removerPeca(origemT);
+            tabuleiro.colocarPeca(rook, destinoT);
+            rook.incrementarNoContadorDeMovimentos();
+        }
+
         return pecaCapturada;
     }
 
 
     // Método que desfaz o movimento feito, quando necessário.
-    public void desfazerMovimento(Posicao posicaoDeOrigem, Posicao posicaoDeDestino, Peca pecaCapturada) {
-        PecaDeXadrez p = (PecaDeXadrez)tabuleiro.removerPeca(posicaoDeDestino);
+    public void desfazerMovimento(Posicao origem, Posicao destino, Peca pecaCapturada) {
+        PecaDeXadrez p = (PecaDeXadrez)tabuleiro.removerPeca(destino);
         p.decrementarNoContadorDeMovimentos();
-        tabuleiro.colocarPeca(p, posicaoDeOrigem);
+        tabuleiro.colocarPeca(p, origem);
 
         // Essa condição, se verdadeira, irá colocar a pecaCapturada de volta no lugar onde ela foi tirada.
         if (pecaCapturada != null) {
-            tabuleiro.colocarPeca(pecaCapturada, posicaoDeDestino);
+            tabuleiro.colocarPeca(pecaCapturada, destino);
             pecasCapturadas.remove(pecaCapturada);
             pecasNoTabuleiro.add(pecaCapturada);
         }
+
+     // Movimento especial roque pequeno, lado do reis.
+        if (p instanceof King && destino.getColuna() == origem.getColuna() + 2) {
+            Posicao origemT = new Posicao(origem.getLinha(), origem.getColuna() + 3);
+            Posicao destinoT = new Posicao(origem.getLinha(), origem.getColuna() + 1);
+            PecaDeXadrez rook = (PecaDeXadrez)tabuleiro.removerPeca(destinoT);
+            tabuleiro.colocarPeca(rook, origemT);
+            rook.decrementarNoContadorDeMovimentos();
+        }
+
+        // Movimento especial roque grande, lado da rainha.
+        if (p instanceof King && destino.getColuna() == origem.getColuna() - 2) {
+            Posicao origemT = new Posicao(origem.getLinha(), origem.getColuna() - 4);
+            Posicao destinoT = new Posicao(origem.getLinha(), origem.getColuna() - 1);
+            PecaDeXadrez rook = (PecaDeXadrez)tabuleiro.removerPeca(destinoT);
+            tabuleiro.colocarPeca(rook, origemT);
+            rook.decrementarNoContadorDeMovimentos();
+        }
+
     }
 
 
@@ -268,7 +305,7 @@ public class PartidaDeXadrez {
         colocarNovaPeca('b', 1, new Knight(tabuleiro, Cor.BRANCA));
         colocarNovaPeca('c', 1, new Bishop(tabuleiro, Cor.BRANCA));
         colocarNovaPeca('d', 1, new Queen(tabuleiro, Cor.BRANCA));
-        colocarNovaPeca('e', 1, new King(tabuleiro, Cor.BRANCA));
+        colocarNovaPeca('e', 1, new King(tabuleiro, Cor.BRANCA, this));
         colocarNovaPeca('f', 1, new Bishop(tabuleiro, Cor.BRANCA));
         colocarNovaPeca('g', 1, new Knight(tabuleiro, Cor.BRANCA));
         colocarNovaPeca('h', 1, new Rook(tabuleiro, Cor.BRANCA));
@@ -285,7 +322,7 @@ public class PartidaDeXadrez {
         colocarNovaPeca('b', 8, new Knight(tabuleiro, Cor.PRETA));
         colocarNovaPeca('c', 8, new Bishop(tabuleiro, Cor.PRETA));
         colocarNovaPeca('d', 8, new Queen(tabuleiro, Cor.PRETA));
-        colocarNovaPeca('e', 8, new King(tabuleiro, Cor.PRETA));
+        colocarNovaPeca('e', 8, new King(tabuleiro, Cor.PRETA, this));
         colocarNovaPeca('f', 8, new Bishop(tabuleiro, Cor.PRETA));
         colocarNovaPeca('g', 8, new Knight(tabuleiro, Cor.PRETA));
         colocarNovaPeca('h', 8, new Rook(tabuleiro, Cor.PRETA));
