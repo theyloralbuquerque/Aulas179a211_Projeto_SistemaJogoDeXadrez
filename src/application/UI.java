@@ -62,7 +62,7 @@ public class UI {
         System.out.println();
         System.out.println("Turno: " + partidaDeXadrez.getTurno());
         if (!partidaDeXadrez.getXequeMate()) {
-            System.out.println("Espeando o jogador: " + partidaDeXadrez.getjogadorAtual());
+            System.out.println("Esperando o jogador das pecasa: " + partidaDeXadrez.getjogadorAtual());
             if (partidaDeXadrez.getXeque()) {
                 System.out.println("XEQUE!");
             }
