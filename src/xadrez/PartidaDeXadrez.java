@@ -229,7 +229,7 @@ public class PartidaDeXadrez {
             pecasNoTabuleiro.add(pecaCapturada);
         }
 
-        // #Movimento especial roque pequeno, lado do reis.
+        // #Movimento especial roque pequeno, lado do rei.
         if (p instanceof King && destino.getColuna() == origem.getColuna() + 2) {
             Posicao origemT = new Posicao(origem.getLinha(), origem.getColuna() + 3);
             Posicao destinoT = new Posicao(origem.getLinha(), origem.getColuna() + 1);
