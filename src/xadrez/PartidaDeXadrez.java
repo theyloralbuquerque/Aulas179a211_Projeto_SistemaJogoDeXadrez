@@ -22,6 +22,7 @@ public class PartidaDeXadrez {
     private boolean xeque;
     private boolean xequeMate;
     private PecaDeXadrez vulneravelEnPassant;
+    private PecaDeXadrez promovida;
 
     private List<Peca> pecasNoTabuleiro = new ArrayList<>();
     private List<Peca> pecasCapturadas = new ArrayList<>();
@@ -52,20 +53,21 @@ public class PartidaDeXadrez {
     public PecaDeXadrez getVulnervelEnPassant() {
         return vulneravelEnPassant;
     }
-    
+
+    public PecaDeXadrez getPromovida() {
+        return promovida;
+    }
+
 
     // Método que retorna uma matriz de peças de xadrez.
     public PecaDeXadrez[][] obterPecas() { // Método que retorna uma matriz do tipo PecaDeXadrez quando for chamado o getPecas().
-
         // Instanciação de uma matriz mat do tipo PecaDeXadrez, passando como argumento as linhas do tabuleiro e as colunas do tabuleiro.
         PecaDeXadrez [][] mat = new PecaDeXadrez [tabuleiro.getLinhas()][tabuleiro.getColunas()];
 
         // Enquanto o i for menor que as linhas do tabuleiro, faça:
         for (int i=0; i<tabuleiro.getLinhas(); i++) {
-
             // Enquanto o j for menor que as colunas do tabuleiro, faça:
             for (int j=0; j<tabuleiro.getColunas(); j++) {
-
                 /* a matriz mat na posição [i][j] recebe o retorno do método peca da o objeto tabuleiro (classe Tabuleiro),
                  * tudo isso feito downcasting para a classe PecaDeXadrez, para que o compilador interprete isso como uma peça
                  * de xadrez e não uma peça comum.
@@ -86,12 +88,10 @@ public class PartidaDeXadrez {
 
     // Método que executa uma jogada de xadrez.
     public PecaDeXadrez executarJogadaDeXadrez(PosicaoDoXadrez posicaoDeOrigem, PosicaoDoXadrez posicaoDeDestino) {
-
         /* A variável origem do tipo Posicao recebe o retorno do método paraPosicaoM(),
          * que irá converter o valor de posicaoDeOrigem para posição da matriz.
          */
         Posicao origem = posicaoDeOrigem.paraPosicaoM();
-
         /* A variável destino do tipo Posicao recebe o retorno do método paraPosicaoM(),
          * que irá converter o valor de posicaoDeOrigem para posição da matriz.
          */
@@ -101,12 +101,21 @@ public class PartidaDeXadrez {
         validarPosicaoDeDestino(origem, destino);
         Peca pecaCapturada = fazerMover(origem, destino);
 
-        PecaDeXadrez pecaMovida = (PecaDeXadrez)tabuleiro.peca(destino);
-        
         // Essa condição testa se o jogador se colocou em xeque.
         if (testeXeque(jogadorAtual)) {
             desfazerMovimento(origem, destino, pecaCapturada);
-            throw new XadrezException("Voce nao pode se colocar em xaque!");
+            throw new XadrezException("Voce nao pode se colocar em xeque!");
+        }
+
+        PecaDeXadrez pecaMovida = (PecaDeXadrez)tabuleiro.peca(destino);
+
+        // #Movimento especial promoção.
+        promovida = null;
+        if (pecaMovida instanceof Pawn) {
+            if ((pecaMovida.getCor() == Cor.BRANCA && destino.getLinha() == 0) || pecaMovida.getCor() == Cor.PRETA && destino.getLinha() == 7) {
+                promovida = (PecaDeXadrez)tabuleiro.peca(destino);
+                promovida = substituirPecaPromovida("Q"); // O default será "Q", mas eu vou perguntar ao usuário o para qual peça ele deseja trocar.
+            }
         }
 
         xeque = (testeXeque(oponente(jogadorAtual))) ? true : false;
@@ -117,7 +126,7 @@ public class PartidaDeXadrez {
         else {
             proximoTurno();
         }
-        
+
         // #Movimento especial en passant.
         if (pecaMovida instanceof Pawn && (destino.getLinha() == origem.getLinha() - 2 || destino.getLinha() == origem.getLinha() + 2)) {
             vulneravelEnPassant = pecaMovida;
@@ -129,6 +138,34 @@ public class PartidaDeXadrez {
         return (PecaDeXadrez)pecaCapturada;
     }
 
+
+    // Método que substitui uma peça promovida pela peça que o usuário desejar.
+    public PecaDeXadrez substituirPecaPromovida(String tipo) {
+        if (promovida == null) {
+            throw new IllegalStateException("Nao ha peca para ser promovida.");
+        }
+        if (!tipo.equals("B") && !tipo.equals("N") && !tipo.equals("R") && !tipo.equals("Q")) {
+            return promovida;
+        }
+        
+        Posicao pos = promovida.obterPosicaoDoXadrez().paraPosicaoM();
+        Peca p = tabuleiro.removerPeca(pos);
+        pecasNoTabuleiro.remove(p);
+
+        PecaDeXadrez novaPeca = novaPeca(tipo, promovida.getCor());
+        tabuleiro.colocarPeca(novaPeca, pos);
+        pecasNoTabuleiro.add(novaPeca);
+
+        return novaPeca;
+    }
+
+
+    private PecaDeXadrez novaPeca(String tipo, Cor cor) {
+        if (tipo.equals("B")) return new Bishop(tabuleiro, cor);
+        if (tipo.equals("N")) return new Knight(tabuleiro, cor);
+        if (tipo.equals("Q")) return new Queen(tabuleiro, cor);
+        return new Rook(tabuleiro, cor);
+    }
 
     // Método que faz mover uma peça de xadrez.
     private Peca fazerMover(Posicao origem, Posicao destino) {
@@ -159,7 +196,7 @@ public class PartidaDeXadrez {
             tabuleiro.colocarPeca(rook, destinoT);
             rook.incrementarNoContadorDeMovimentos();
         }
-        
+
         // #Movimento especial en passant.
         if (p instanceof Pawn) {
             if (origem.getColuna() != destino.getColuna() && pecaCapturada == null) {
@@ -209,7 +246,7 @@ public class PartidaDeXadrez {
             tabuleiro.colocarPeca(rook, origemT);
             rook.decrementarNoContadorDeMovimentos();
         }
-        
+
         // #Movimento especial en passant.
         if (p instanceof Pawn) {
             if (origem.getColuna() != destino.getColuna() && pecaCapturada == vulneravelEnPassant) {
@@ -222,7 +259,6 @@ public class PartidaDeXadrez {
                     posicaoDoPeao = new Posicao(4, destino.getColuna());
                 }
                 tabuleiro.colocarPeca(peao, posicaoDoPeao);
-
             }
         }
 
@@ -246,7 +282,6 @@ public class PartidaDeXadrez {
 
     // Método que valida se a posição de destino de uma peça é um movimento possível, com base na posição de origem.
     private void validarPosicaoDeDestino(Posicao origem, Posicao destino) {
-
         // Se para a peça de origem a posição de destino não é um movimento possível.
         if (!tabuleiro.peca(origem).movimentoPossivel(destino)) {
             throw new XadrezException("A peca escolhida nao pode se mover para a posicao de destino.");
@@ -257,14 +292,12 @@ public class PartidaDeXadrez {
     // Método que troca o turno de jogada.
     private void proximoTurno() {
         turno++;
-
         // Se o jogadorAtual tiver a cor Branca, então a cor dele será Preta, senão, será branca.
         jogadorAtual = (jogadorAtual == Cor.BRANCA) ? Cor.PRETA : Cor.BRANCA;
     }
 
 
     private Cor oponente(Cor cor) {
-
         //Se a cor recebida como argumento for BRANCA, eu retorno Cor.PRETA, senão, retorno Cor.BRANCA.
         return (cor == Cor.BRANCA) ? Cor.PRETA : Cor.BRANCA;
     }
@@ -333,7 +366,6 @@ public class PartidaDeXadrez {
          * em coordenadas de matriz.
          */
         tabuleiro.colocarPeca(peca, new PosicaoDoXadrez(coluna, linha).paraPosicaoM());
-
         pecasNoTabuleiro.add(peca);
     }
 

@@ -16,17 +16,17 @@ public class Program {
 
         Scanner sc = new Scanner(System.in);
         PartidaDeXadrez partidaDeXadrez = new PartidaDeXadrez(); // Instanciação do objeto partidaDeXadrez do tipo PartidaDeXadrez.
-        List<PecaDeXadrez> capturadas = new ArrayList<>();
+        List<PecaDeXadrez> capturadas = new ArrayList<>(); // Instanciação da lista de peças capturadas.
 
         // Enquanto getXequeMate() for falso, faça.
         while (!partidaDeXadrez.getXequeMate()) {
             try {
-                UI.limparTela();
+                UI.limparTela(); // Chamada do método que limpa a tela cada turno. 
 
-                UI.printPartida(partidaDeXadrez, capturadas);
+                UI.printPartida(partidaDeXadrez, capturadas); // Chamada do método que imprime a a partida.
                 System.out.println();
                 System.out.print("Origem: ");
-                PosicaoDoXadrez origem = UI.lerPosicaoXadrez(sc);
+                PosicaoDoXadrez origem = UI.lerPosicaoXadrez(sc); // O retorno do método lerPosicaoXadrez() será armazenado em origem.
 
                 boolean[][] movimentosPossiveis = partidaDeXadrez.movimentosPossiveis(origem);
                 UI.limparTela();
@@ -36,11 +36,21 @@ public class Program {
                 System.out.print("Destino: ");
                 PosicaoDoXadrez destino = UI.lerPosicaoXadrez(sc);
                 PecaDeXadrez pecaCapturada = partidaDeXadrez.executarJogadaDeXadrez(origem, destino);
-
+                
+                // Se pecaCapturada fr diferente de nulo, faça:
                 if (pecaCapturada != null) {
-
                     // Será adicionado à Lista capturadas a pecaCapturada.
                     capturadas.add(pecaCapturada);
+                }
+
+                if (partidaDeXadrez.getPromovida() != null) {
+                    System.out.print("Digite para qual peca deseja promover (B/N/R/Q): ");
+                    String tipo = sc.nextLine().toUpperCase();
+                    while (!tipo.equals("B") && !tipo.equals("N") && !tipo.equals("R") && !tipo.equals("Q")) {
+                        System.out.print("Valor invalido! Digite para qual peca deseja promover (B/N/R/Q): ");
+                        tipo = sc.nextLine().toUpperCase();
+                    }
+                    partidaDeXadrez.substituirPecaPromovida(tipo);
                 }
             }
             catch (XadrezException e) {

@@ -54,7 +54,7 @@ public class Tabuleiro {
         
     	// Se o método retornar true (o valor da posicao diferente de null), quer dizer que tem uma peça nessa posição.
         if (haUmaPeca(posicao)) {
-            throw new TabuleiroException("Já existe uma peça na posição" + posicao);
+            throw new TabuleiroException("Ja existe uma peca na posicao" + posicao);
         }
         
         // A matriz na posição[posicao.getLinha()][posicao.getColuna()] vai receber o valor de peca.
